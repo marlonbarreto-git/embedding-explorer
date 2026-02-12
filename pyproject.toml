@@ -2,6 +2,14 @@
 name = "embedding-explorer"
 version = "0.1.0"
 description = "Visual tool for understanding embeddings. Compare models, visualize in 2D with PCA, and analyze similarity."
+license = {text = "MIT"}
+authors = [{name = "Marlon Barreto", email = "mbarretot@hotmail.com"}]
+keywords = ["embeddings", "AI", "NLP", "visualization"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+]
 requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.115.0",
@@ -11,6 +19,11 @@ dependencies = [
     "numpy>=2.0.0",
     "scikit-learn>=1.6.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/marlonbarreto-git/embedding-explorer"
+Repository = "https://github.com/marlonbarreto-git/embedding-explorer"
+Issues = "https://github.com/marlonbarreto-git/embedding-explorer/issues"
 
 [project.optional-dependencies]
 dev = [

@@ -1,9 +1,7 @@
 """Tests for the visualization module."""
 
-import numpy as np
-import pytest
 
-from embedding_explorer.embedder import Embedder, EmbeddingResult
+from embedding_explorer.embedder import Embedder
 from embedding_explorer.visualizer import Point2D, SimilarityPair, Visualizer
 
 

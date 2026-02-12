@@ -1,53 +1,80 @@
-# embedding-explorer
+# Embedding Explorer
 
-Visual tool for understanding text embeddings. Generate embeddings with sentence-transformers, visualize in 2D with PCA, compute similarity matrices, and find the most similar text pairs.
+Visual tool for understanding text embeddings with 2D projection and similarity analysis.
 
-## Features
+## Overview
 
-- **Multi-model support**: all-MiniLM-L6-v2, all-mpnet-base-v2, paraphrase-MiniLM-L3-v2
-- **2D visualization**: PCA-based dimensionality reduction for plotting
-- **Similarity analysis**: Cosine similarity matrix and top-k most similar pairs
-- **Normalized embeddings**: All vectors are unit-normalized for accurate cosine similarity
+Embedding Explorer generates embeddings using sentence-transformers, reduces them to 2D with PCA for visualization, and computes pairwise cosine similarity to find the most related text pairs. It supports multiple embedding models so you can compare quality and dimensionality trade-offs.
 
 ## Architecture
 
 ```
-embedding_explorer/
-├── embedder.py     # Embedding generation with sentence-transformers
-└── visualizer.py   # PCA reduction, similarity matrix, pair ranking
+Input Texts
+  |
+  v
+Embedder (sentence-transformers)
+  |
+  +---> all-MiniLM-L6-v2       (384d, fast)
+  +---> all-mpnet-base-v2      (768d, best quality)
+  +---> paraphrase-MiniLM-L3-v2 (384d, fastest)
+  |
+  v
+EmbeddingResult (texts + numpy array + dimension)
+  |
+  v
+Visualizer
+  |
+  +---> PCA reduction       -> list[Point2D]
+  +---> Similarity matrix   -> numpy NxN array
+  +---> Top-k similar pairs -> list[SimilarityPair]
 ```
+
+## Features
+
+- Generate embeddings with multiple sentence-transformer models
+- Dimensionality reduction to 2D via PCA for visualization
+- Full cosine similarity matrix computation
+- Find top-k most similar text pairs from a corpus
+- Three pre-configured models with different quality/speed trade-offs
+
+## Tech Stack
+
+- Python 3.11+
+- sentence-transformers
+- NumPy
+- scikit-learn (PCA, cosine similarity)
+- FastAPI + Uvicorn
+- Pydantic
 
 ## Quick Start
 
-```python
-from embedding_explorer.embedder import Embedder
-from embedding_explorer.visualizer import Visualizer
-
-embedder = Embedder(model_name="all-MiniLM-L6-v2")
-result = embedder.embed([
-    "Python is great for AI",
-    "Machine learning with Python",
-    "JavaScript for web dev",
-    "React frontend development",
-])
-
-viz = Visualizer()
-points = viz.reduce_to_2d(result)       # 2D coordinates for plotting
-pairs = viz.find_most_similar(result)    # Most similar text pairs
-matrix = viz.compute_similarity_matrix(result)  # Full NxN similarity
+```bash
+git clone https://github.com/marlonbarreto-git/embedding-explorer.git
+cd embedding-explorer
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+pytest
 ```
 
-## Development
+## Project Structure
+
+```
+src/embedding_explorer/
+  __init__.py
+  embedder.py      # Embedding generation with sentence-transformers
+  visualizer.py    # PCA reduction, similarity matrix, top-k pairs
+tests/
+  test_embedder.py
+  test_visualizer.py
+```
+
+## Testing
 
 ```bash
-uv sync --all-extras
-uv run pytest tests/ -v
+pytest -v --cov=src/embedding_explorer
 ```
 
-## Roadmap
-
-- **v2**: Compare multiple embedding models side-by-side, interactive semantic search
-- **v3**: Auto clustering, model recommendation per dataset, export results
+18 tests covering embedding generation, model selection, PCA reduction, and similarity analysis.
 
 ## License
 
